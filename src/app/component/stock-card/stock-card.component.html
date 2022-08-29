@@ -1,0 +1,50 @@
+<div class="card shadow">
+    <div class="card-body">
+        <div class="row" *ngIf="loadedStock">
+            <ng-container *ngIf="foundStock; else notFoundStock">
+                <div class="col-12 d-flex justify-content-sm-between">
+
+                    <h3>{{stockDetail?.description + " (" + stockDetail?.symbol + ")"}}</h3> <button type="button"
+                        class="btn-close" aria-label="Close" (click)="removeStock()"></button>
+                </div>
+                <div class="col-md-4 col-12">
+                    <p><b>Change today: </b>{{stockDetail?.sentiment?.dp | number:'1.2-2'}}%</p>
+                    <p><b>Current price: </b>{{stockDetail?.sentiment?.c | currency:"USD":"symbol"}}</p>
+                </div>
+    
+                <div class="col-md-4 col-12">
+                    <p><b>Opening price: </b>{{stockDetail?.sentiment?.o | currency:"USD":"symbol"}}</p>
+                    <p><b>High price: </b> {{stockDetail?.sentiment?.h | currency:"USD":"symbol"}}</p>
+                </div>
+                <div class="col-md-4 col-12">
+                <app-image-indicator [value]="stockDetail?.sentiment?.dp"></app-image-indicator>
+            </div>
+                <div class="col-12">
+                    <a [routerLink]="['sentiment', stockDetail.symbol]" class="float-right">See sentiment detail ></a>
+                </div>
+            </ng-container>
+
+            <ng-template #notFoundStock>
+
+                <div class="col-12 d-flex justify-content-sm-between">
+
+                    <app-warning-text [message]="stock + ' not found!'"></app-warning-text>
+                    
+                    <button type="button"
+                        class="btn-close" aria-label="Close" (click)="removeStock()"></button>
+                </div>
+            </ng-template>
+            
+        </div>
+        <div class="row" *ngIf="!loadedStock">
+            <div class="col-12 d-flex justify-content-sm-between">
+
+                <app-spinner></app-spinner>
+                
+                 
+            </div>
+           
+        </div>
+        
+    </div>
+</div>

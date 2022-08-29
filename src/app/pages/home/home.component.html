@@ -1,0 +1,10 @@
+<div class="container p-5">
+    <div class="row">
+        <div class="col-md-8 col-12">
+            <app-search-stock (stock)="getStock($event)"></app-search-stock>
+        </div>
+        <div class="col-12 my-3" *ngFor="let stock of stockList">
+            <app-stock-card [stock]="stock" (stockToDelete)="stockDelete($event)"></app-stock-card>
+        </div>
+    </div>
+</div>

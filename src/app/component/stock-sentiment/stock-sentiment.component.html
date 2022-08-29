@@ -1,0 +1,43 @@
+<div class="container p-5">
+
+    <div class="card shadow p-3 my-3">
+        <div class="card-body" *ngIf="loadedStock; else showSpinner">
+            <div class="row">
+
+                <div *ngIf="noData; else showData">
+                    <app-warning-text [message]="'No data available for the last 3 month!'"></app-warning-text>
+                </div>
+
+                <ng-template #showData>
+                    <h3>{{stockDetail?.description + " (" + stockDetail?.symbol + ")"}}</h3>
+                    <div class="col-md-4 col-12" *ngFor="let s of sentiments">
+                        <div class="row m-3 border">
+                            <p><strong>{{s.month | month}} {{s.year}}</strong></p>
+                            <div class="col-6">
+
+                                <p> <strong>Change: </strong> {{s.change}}</p>
+                                <p> <strong>MSPR: </strong>{{s.mspr}}</p>
+
+                            </div>
+                            <div class="col-6">
+                                <app-image-indicator [value]="s.change"></app-image-indicator>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+
+        <ng-template #showSpinner>
+            <app-spinner></app-spinner>
+        </ng-template>
+
+
+    </div>
+
+
+
+    <a routerLink="/" role="button" class="btn btn-sm btn-outline-secondary">
+        < Back to list</a>
+
+</div>

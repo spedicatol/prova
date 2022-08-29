@@ -1,0 +1,8 @@
+<form (ngSubmit)="searchBySymbol()" [formGroup]="stockForm">
+    <div class="form-group">
+        <label for="exampleStockSymbol">Enter the symbol of a stock to track (i.e. AAPL,TSLA,GOOGL)</label>
+        <input type="text" maxlength="5" class="form-control" id="exampleStockSymbol" formControlName="symbol">
+    </div>
+    <button type="submit" class="btn btn-primary my-2 float-right" [disabled]="!stockForm.valid">Track Stock</button>
+</form>
+
