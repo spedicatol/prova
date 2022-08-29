@@ -29,36 +29,38 @@ export class SearchStockComponent implements OnInit {
     this.showSpinner = true;
     let stockSymbol = this.stockForm.controls['symbol'].value.toUpperCase();
 
-    let search = this.data.search(stockSymbol);
-    search.subscribe({
-      next: (res) => {
-
-        this.showSpinner = false;
-
-        //check if stock is already in local storage
-        let isStored = this.utility.stockIsAlreadyStored(stockSymbol);
-
-        if (res['count'] != 0 && !isStored) {
-
-          let stockRes = res['result'].find(obj => {
-            return obj.symbol === stockSymbol;
-          });
-
-          if (stockRes) {
-            localStorage.setItem("stock_" + Date.now(), JSON.stringify(stockRes));
-            this.stock.emit(stockRes);
+    //check if stock is already in local storage
+    let isStored = this.utility.stockIsAlreadyStored(stockSymbol);
+    
+    if(!isStored){
+      let search = this.data.search(stockSymbol);
+      search.subscribe({
+        next: (res) => {
+  
+          this.showSpinner = false;
+  
+            if (res['count'] != 0) {
+  
+            let stockRes = res['result'].find(obj => {
+              return obj.symbol === stockSymbol;
+            });
+  
+            if (stockRes) {
+              localStorage.setItem("stock_" + Date.now(), JSON.stringify(stockRes));
+              this.stock.emit(stockRes);
+            }
+  
           }
-
+          this.stockForm.reset();
+        },
+        error: (err) => {
+          this.showSpinner = false;
+          this.showError = true;
+          this.stockForm.reset();
         }
-        this.stockForm.reset();
-      },
-      error: (err) => {
-        this.showSpinner = false;
-        this.showError = true;
-        this.stockForm.reset();
-      }
-    });
-
+      });
+    }
+   
   }
 
 }
