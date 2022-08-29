@@ -1,5 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Form, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Stock } from 'src/app/model/stock';
+import { DataService } from 'src/app/services/data.service';
 
 @Component({
   selector: 'app-search-stock',
@@ -8,10 +10,12 @@ import { Form, FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class SearchStockComponent implements OnInit {
 
-  @Output() stock = new EventEmitter<string>();
+  @Output() stock = new EventEmitter<Stock>();
   stockForm: FormGroup;
+  showError: boolean = false;
+  showSpinner: boolean = false;
 
-  constructor() { }
+  constructor(private data: DataService) { }
 
   ngOnInit(): void {
     this.stockForm = new FormGroup({
@@ -19,13 +23,38 @@ export class SearchStockComponent implements OnInit {
     })
   }
 
-  searchBySymbol() {
-    let stockSymbol = this.stockForm.controls['symbol'].value.toUpperCase();
-    localStorage.setItem("stock_symbol_" + Date.now(), stockSymbol);
-    
-    this.stock.emit(stockSymbol);
 
-    this.stockForm.reset();
+  searchBySymbol() {
+    this.showSpinner = true;
+    let stockSymbol = this.stockForm.controls['symbol'].value.toUpperCase();
+
+    let search = this.data.search(stockSymbol);
+
+    search.subscribe({
+      next: (res) => {
+        
+        this.showSpinner = false;
+        if (res['count'] != 0) {
+
+          let stockRes = res['result'].find(obj => {
+            return obj.symbol === stockSymbol;
+          });
+
+          if (stockRes) {
+            localStorage.setItem("stock_symbol_" + Date.now(), JSON.stringify(stockRes));
+            this.stock.emit(stockRes);
+          }
+
+        }
+        this.stockForm.reset();
+      },
+      error: (err) => {
+        this.showSpinner = false;
+        this.showError = true;
+        this.stockForm.reset();
+      }
+    });
+
   }
 
 }

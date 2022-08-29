@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Stock } from '../model/stock';
 
 @Injectable({
   providedIn: 'root'
@@ -7,25 +8,19 @@ export class UtilityService {
 
   constructor() { }
 
-  crea(list, sentiment, key) {
-    if (list['count'] != 0) {
-      let stockRes = list['result'].find(obj => {
-        return obj.symbol === key;
-      });
-      stockRes = stockRes ? stockRes : null;
-      if (stockRes) {
-        stockRes.sentiment = sentiment;
-      }
-      return stockRes;
-    }
-
-   
-  }
-
   removeStockInLocalStorageBySymbol(symbol){
     for (let key of Object.keys({ ...localStorage })) {      
-      if(localStorage.getItem(key) === symbol)
+      if((JSON.parse(localStorage.getItem(key)) as Stock).symbol === symbol)
       localStorage.removeItem(key);
     } 
+  }
+
+  getStockList(){
+    let list = [];
+    for (let value of Object.values({ ...localStorage })) {      
+      list.push(JSON.parse(value));
+    }
+
+    return list;
   }
 }

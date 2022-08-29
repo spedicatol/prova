@@ -12,26 +12,22 @@ import { UtilityService } from '../../services/utility.service';
 })
 export class StockCardComponent implements OnInit {
 
-  @Input() stock: string;
-  @Output() stockToDelete: EventEmitter<string> = new EventEmitter<string>();
+  @Input() stock: Stock;
+  @Output() stockToDelete: EventEmitter<Stock> = new EventEmitter<Stock>();
 
-  stockDetail: Stock;
   loadedStock: boolean = false;
   foundStock: boolean = false;
   constructor(private data: DataService, private utility: UtilityService) { }
 
   ngOnInit(): void {
-    let search = this.data.search(this.stock);
-    let searchBySymbol = this.data.searchStockBySymbol(this.stock.toUpperCase());
+    
+    let searchBySymbol = this.data.searchStockBySymbol(this.stock.symbol.toUpperCase());
 
-    forkJoin({
-      stock: search,
-      sentiment: searchBySymbol
-    }).subscribe({
+    searchBySymbol.subscribe({
       next: (res) => {
         this.loadedStock = true;
-        this.stockDetail = this.utility.crea(res.stock, res.sentiment, this.stock);
-        this.foundStock = this.stockDetail != null;
+        this.stock.sentiment = res;
+        this.foundStock = this.stock != null;
       },
       error: (err) => {
         this.foundStock = false;

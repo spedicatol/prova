@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ɵisListLikeIterable } from '@angular/core';
+import { Stock } from 'src/app/model/stock';
 import { DataService } from '../../services/data.service';
 import { UtilityService } from '../../services/utility.service';
 
@@ -9,24 +10,21 @@ import { UtilityService } from '../../services/utility.service';
 })
 export class HomeComponent implements OnInit {
 
-  stockList: string[] = [];
+  stockList: Stock[] = [];
   constructor(private data: DataService, private utility: UtilityService) { }
 
   ngOnInit(): void {
-
-    for (let value of Object.values({ ...localStorage })) {      
-      this.stockList.push(value);
-    }
-
-  }
+    this.stockList = this.utility.getStockList();  }
 
   stockDelete(evt){
-    let index = this.stockList.indexOf(evt);
-    this.stockList.splice(index, 1);
-    this.utility.removeStockInLocalStorageBySymbol(evt);
+    let symbol = evt.symbol;
+    this.utility.removeStockInLocalStorageBySymbol(symbol);
+    this.stockList = this.utility.getStockList();
   }
 
   getStock(evt) {
     this.stockList.push(evt);
   }
+
+
 }

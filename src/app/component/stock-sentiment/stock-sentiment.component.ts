@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
+import { UtilityService } from 'src/app/services/utility.service';
 import { Sentiment } from '../../model/sentiment';
 import { Stock } from '../../model/stock';
 import { DataService } from '../../services/data.service';
@@ -15,23 +16,24 @@ export class StockSentimentComponent implements OnInit {
   sentiments: Sentiment[];
   noData: boolean = false;
   loadedStock: boolean = false;
-  constructor(private route: ActivatedRoute, private data: DataService) { }
+  constructor(private route: ActivatedRoute, private data: DataService, private utility: UtilityService) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(r => {
+
       let stock = r['symbol'];
-      let search = this.data.search(stock);
+      
+      let stockList = this.utility.getStockList();
+      this.stockDetail = stockList.find(obj => {
+        return obj.symbol === stock;
+      });
+
+      
       let getInsider = this.data.getInsiderSentiment(stock);
 
-      forkJoin({
-        stock: search,
-        sentiment: getInsider
-      }).subscribe({
+      getInsider.subscribe({
         next: (res) => {
-          this.stockDetail = res.stock['result'].find(obj => {
-            return obj.symbol === stock;
-          });
-          this.sentiments = res.sentiment['data'];
+          this.sentiments = res['data'];
           if (this.sentiments.length === 0)
             this.noData = true;
 
@@ -41,8 +43,9 @@ export class StockSentimentComponent implements OnInit {
           this.noData = true;
           this.loadedStock = true;
         }
-      });
+    
     })
+  })
   }
 
 }

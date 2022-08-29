@@ -29,8 +29,8 @@ export class DataService {
     let params = new HttpParams({ fromString: 'symbol=' + symbol + '&token=' + token });
 
     return this.httpClient
-      .get<Sentiment>(baseUrl + "/quote", { params: params })
-      .pipe(catchError(this.handleError));
+      .get<Sentiment>(baseUrl + "/quote", { params: params });
+      //.pipe(catchError(this.handleError));
   }
 
   getInsiderSentiment(symbol: string) {
