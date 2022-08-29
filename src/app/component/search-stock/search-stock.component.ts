@@ -26,13 +26,14 @@ export class SearchStockComponent implements OnInit {
 
 
   searchBySymbol() {
-    this.showSpinner = true;
     let stockSymbol = this.stockForm.controls['symbol'].value.toUpperCase();
 
     //check if stock is already in local storage
     let isStored = this.utility.stockIsAlreadyStored(stockSymbol);
-    
+
     if(!isStored){
+      this.showSpinner = true;
+
       let search = this.data.search(stockSymbol);
       search.subscribe({
         next: (res) => {
