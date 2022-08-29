@@ -13,7 +13,6 @@ export class SearchStockComponent implements OnInit {
 
   @Output() stock = new EventEmitter<Stock>();
   stockForm: FormGroup;
-  showError: boolean = false;
   showSpinner: boolean = false;
 
   constructor(private data: DataService, private utility: UtilityService) { }
@@ -31,37 +30,43 @@ export class SearchStockComponent implements OnInit {
     //check if stock is already in local storage
     let isStored = this.utility.stockIsAlreadyStored(stockSymbol);
 
-    if(!isStored){
+    if (!isStored) {
       this.showSpinner = true;
 
       let search = this.data.search(stockSymbol);
       search.subscribe({
         next: (res) => {
-  
           this.showSpinner = false;
-  
-            if (res['count'] != 0) {
-  
+
+          if (res['count'] != 0) {
+
             let stockRes = res['result'].find(obj => {
               return obj.symbol === stockSymbol;
             });
-  
+
             if (stockRes) {
               localStorage.setItem("stock_" + Date.now(), JSON.stringify(stockRes));
               this.stock.emit(stockRes);
+            } else {
+              alert("Stock not found");
             }
-  
+
           }
           this.stockForm.reset();
+
         },
         error: (err) => {
           this.showSpinner = false;
-          this.showError = true;
+          alert("Error");
+
           this.stockForm.reset();
         }
       });
+    } else {
+      alert("Stock already in list");
+      this.stockForm.reset();
     }
-   
+
   }
 
 }
