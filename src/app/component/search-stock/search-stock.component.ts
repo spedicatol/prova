@@ -2,6 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Form, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Stock } from 'src/app/model/stock';
 import { DataService } from 'src/app/services/data.service';
+import { UtilityService } from 'src/app/services/utility.service';
 
 @Component({
   selector: 'app-search-stock',
@@ -15,7 +16,7 @@ export class SearchStockComponent implements OnInit {
   showError: boolean = false;
   showSpinner: boolean = false;
 
-  constructor(private data: DataService) { }
+  constructor(private data: DataService, private utility: UtilityService) { }
 
   ngOnInit(): void {
     this.stockForm = new FormGroup({
@@ -29,19 +30,22 @@ export class SearchStockComponent implements OnInit {
     let stockSymbol = this.stockForm.controls['symbol'].value.toUpperCase();
 
     let search = this.data.search(stockSymbol);
-
     search.subscribe({
       next: (res) => {
-        
+
         this.showSpinner = false;
-        if (res['count'] != 0) {
+
+        //check if stock is already in local storage
+        let isStored = this.utility.stockIsAlreadyStored(stockSymbol);
+
+        if (res['count'] != 0 && !isStored) {
 
           let stockRes = res['result'].find(obj => {
             return obj.symbol === stockSymbol;
           });
 
           if (stockRes) {
-            localStorage.setItem("stock_symbol_" + Date.now(), JSON.stringify(stockRes));
+            localStorage.setItem("stock_" + Date.now(), JSON.stringify(stockRes));
             this.stock.emit(stockRes);
           }
 

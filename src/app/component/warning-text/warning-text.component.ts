@@ -10,7 +10,6 @@ export class WarningTextComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log(this.message);
     
   }
 

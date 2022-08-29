@@ -23,4 +23,15 @@ export class UtilityService {
 
     return list;
   }
+
+  stockIsAlreadyStored(symbol){
+   
+    for (let value of Object.values({ ...localStorage })) {  
+      let stock = JSON.parse(value);
+      if(stock.symbol === symbol)
+        return true;
+    } 
+
+    return false;
+  }
 }
