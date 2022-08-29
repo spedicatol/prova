@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
-import { Sentiment } from 'src/app/model/sentiment';
-import { Stock } from 'src/app/model/stock';
-import { DataService } from 'src/app/services/data.service';
+import { Sentiment } from '../../model/sentiment';
+import { Stock } from '../../model/stock';
+import { DataService } from '../../services/data.service';
 
 @Component({
   selector: 'app-stock-sentiment',

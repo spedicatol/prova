@@ -1,9 +1,9 @@
 import { keyframes } from '@angular/animations';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { forkJoin } from 'rxjs';
-import { Stock } from 'src/app/model/stock';
-import { DataService } from 'src/app/services/data.service';
-import { UtilityService } from 'src/app/services/utility.service';
+import { Stock } from '../../model/stock';
+import { DataService } from '../../services/data.service';
+import { UtilityService } from '../../services/utility.service';
 
 @Component({
   selector: 'app-stock-card',
