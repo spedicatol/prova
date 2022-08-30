@@ -19,7 +19,7 @@ export class SearchStockComponent implements OnInit {
 
   ngOnInit(): void {
     this.stockForm = new FormGroup({
-      symbol: new FormControl('', Validators.required)
+      symbol: new FormControl(null, Validators.pattern('^[a-zA-Z ]*$'))
     })
   }
 
@@ -30,20 +30,22 @@ export class SearchStockComponent implements OnInit {
     //check if stock is already in local storage
     let isStored = this.utility.stockIsAlreadyStored(stockSymbol);
 
+    //if the stock is not stored
     if (!isStored) {
       this.showSpinner = true;
-
+      //search for stock
       let search = this.data.search(stockSymbol);
       search.subscribe({
         next: (res) => {
           this.showSpinner = false;
 
           if (res['count'] != 0) {
-
+            //takes the matching stock among those returned from the API
             let stockRes = res['result'].find(obj => {
               return obj.symbol === stockSymbol;
             });
 
+            //if there is a match, store the stock in the localStorage
             if (stockRes) {
               localStorage.setItem("stock_" + Date.now(), JSON.stringify(stockRes));
               this.stock.emit(stockRes);
@@ -58,7 +60,6 @@ export class SearchStockComponent implements OnInit {
         error: (err) => {
           this.showSpinner = false;
           alert("Error");
-
           this.stockForm.reset();
         }
       });

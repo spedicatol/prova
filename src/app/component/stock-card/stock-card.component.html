@@ -4,21 +4,21 @@
             <ng-container *ngIf="foundStock && loadedStock">
                 <div class="col-12 d-flex justify-content-sm-between">
 
-                    <h3>{{stock?.description + " (" + stock?.symbol + ")"}}</h3> <button type="button"
-                        class="btn-close" aria-label="Close" (click)="removeStock()"></button>
+                    <h3>{{stock?.description + " (" + stock?.symbol + ")"}}</h3> <button type="button" class="btn-close"
+                        aria-label="Close" (click)="removeStock()"></button>
                 </div>
-                <div class="col-md-4 col-12">
+                <div class="col-md-5 col-12">
                     <p><b>Change today: </b>{{stock?.sentiment?.dp | number:'1.2-2'}}%</p>
                     <p><b>Current price: </b>{{stock?.sentiment?.c | currency:"USD":"symbol"}}</p>
                 </div>
-    
-                <div class="col-md-4 col-12">
+
+                <div class="col-md-5 col-12">
                     <p><b>Opening price: </b>{{stock?.sentiment?.o | currency:"USD":"symbol"}}</p>
                     <p><b>High price: </b> {{stock?.sentiment?.h | currency:"USD":"symbol"}}</p>
                 </div>
-                <div class="col-md-4 col-12">
-                <app-image-indicator [value]="stock?.sentiment?.dp"></app-image-indicator>
-            </div>
+                <div class="col-md-2 col-12">
+                    <app-image-indicator [value]="stock?.sentiment?.dp"></app-image-indicator>
+                </div>
                 <div class="col-12">
                     <a [routerLink]="['sentiment', stock.symbol]" class="float-right">See sentiment detail ></a>
                 </div>
@@ -29,14 +29,13 @@
                 <div class="col-12 d-flex justify-content-sm-between">
 
                     <app-warning-text [message]="stock + ' not found!'"></app-warning-text>
-                    
-                    <button type="button"
-                        class="btn-close" aria-label="Close" (click)="removeStock()"></button>
+
+                    <button type="button" class="btn-close" aria-label="Close" (click)="removeStock()"></button>
                 </div>
             </ng-container>
-            
+
         </div>
-   
-        
+
+
     </div>
 </div>

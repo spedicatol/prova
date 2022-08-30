@@ -14,11 +14,15 @@ export class HomeComponent implements OnInit {
   constructor(private data: DataService, private utility: UtilityService) { }
 
   ngOnInit(): void {
-    this.stockList = this.utility.getStockList();  }
+    //fill the list with all stock in the localStorage
+    this.stockList = this.utility.getStockList();
+  }
 
-  stockDelete(evt){
+  stockDelete(evt) {
     let symbol = evt.symbol;
+    //remove stock from localStorage
     this.utility.removeStockInLocalStorageBySymbol(symbol);
+    //update stock list
     this.stockList = this.utility.getStockList();
   }
 

@@ -8,6 +8,7 @@ export class UtilityService {
 
   constructor() { }
 
+  //remove the stock from localStorage based on the symbol
   removeStockInLocalStorageBySymbol(symbol){
     for (let key of Object.keys({ ...localStorage })) {      
       if((JSON.parse(localStorage.getItem(key)) as Stock).symbol === symbol)
@@ -15,6 +16,7 @@ export class UtilityService {
     } 
   }
 
+  //get all the stocks stored in the localStorage
   getStockList(){
     let list = [];
     for (let value of Object.values({ ...localStorage })) {      
@@ -24,6 +26,7 @@ export class UtilityService {
     return list;
   }
 
+  //check if a stock is already in the list
   stockIsAlreadyStored(symbol){
    
     for (let value of Object.values({ ...localStorage })) {  

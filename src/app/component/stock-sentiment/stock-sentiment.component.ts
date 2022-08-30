@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { forkJoin } from 'rxjs';
 import { UtilityService } from 'src/app/services/utility.service';
 import { Sentiment } from '../../model/sentiment';
 import { Stock } from '../../model/stock';
@@ -19,16 +18,25 @@ export class StockSentimentComponent implements OnInit {
   constructor(private route: ActivatedRoute, private data: DataService, private utility: UtilityService) { }
 
   ngOnInit(): void {
+
+    this.getInsiderTrend();
+  }
+
+  getInsiderTrend() {
+    //get Route Parameter (:/symbol)
     this.route.params.subscribe(r => {
 
       let stock = r['symbol'];
-      
+
+      //get the list of stock from the localStorage
       let stockList = this.utility.getStockList();
+
+      //find the matching stock
       this.stockDetail = stockList.find(obj => {
         return obj.symbol === stock;
       });
 
-      
+      //get insider trend from API
       let getInsider = this.data.getInsiderSentiment(stock);
 
       getInsider.subscribe({
@@ -43,9 +51,9 @@ export class StockSentimentComponent implements OnInit {
           this.noData = true;
           this.loadedStock = true;
         }
-    
+
+      })
     })
-  })
   }
 
 }

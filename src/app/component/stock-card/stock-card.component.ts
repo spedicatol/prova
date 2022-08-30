@@ -20,7 +20,14 @@ export class StockCardComponent implements OnInit {
   constructor(private data: DataService, private utility: UtilityService) { }
 
   ngOnInit(): void {
-    
+
+    //add sentiment information to stock (input variable)
+    this.getStock();
+ 
+  }
+
+
+  getStock(){
     let searchBySymbol = this.data.searchStockBySymbol(this.stock.symbol.toUpperCase());
 
     searchBySymbol.subscribe({
@@ -35,6 +42,7 @@ export class StockCardComponent implements OnInit {
       }
     });
   }
+
 
   removeStock() {
     this.stockToDelete.emit(this.stock);
