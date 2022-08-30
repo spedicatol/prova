@@ -25,7 +25,7 @@ export class SearchStockComponent implements OnInit {
 
 
   searchBySymbol() {
-    let stockSymbol = this.stockForm.controls['symbol'].value.toUpperCase();
+    let stockSymbol = this.stockForm.controls['symbol'].value.toUpperCase().trim();
 
     //check if stock is already in local storage
     let isStored = this.utility.stockIsAlreadyStored(stockSymbol);
