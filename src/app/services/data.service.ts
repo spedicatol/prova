@@ -29,8 +29,8 @@ export class DataService {
     let params = new HttpParams({ fromString: 'symbol=' + symbol + '&token=' + token });
 
     return this.httpClient
-      .get<Sentiment>(baseUrl + "/quote", { params: params });
-      //.pipe(catchError(this.handleError));
+      .get<Sentiment>(baseUrl + "/quote", { params: params })
+      .pipe(catchError(this.handleError));
   }
 
   getInsiderSentiment(symbol: string) {
@@ -38,7 +38,7 @@ export class DataService {
     let baseUrl = environment.apiUrl;
     let fromDate = moment(new Date()).subtract(3, 'months').set("D", 1).format('YYYY-MM-DD');
     let toDate = moment(new Date()).subtract(1, 'months').set("D", 1).format('YYYY-MM-DD')
-    
+
     let params = new HttpParams({ fromString: 'symbol=' + symbol + "&from=" + fromDate + "&to=" + toDate + '&token=' + token });
 
     return this.httpClient
@@ -56,6 +56,8 @@ export class DataService {
       errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
     return throwError(() => {
+      console.log(errorMessage);
+      
       return errorMessage;
     });
   }

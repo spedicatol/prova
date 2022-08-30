@@ -18,7 +18,6 @@ export class StockSentimentComponent implements OnInit {
   constructor(private route: ActivatedRoute, private data: DataService, private utility: UtilityService) { }
 
   ngOnInit(): void {
-
     this.getInsiderTrend();
   }
 

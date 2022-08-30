@@ -16,14 +16,14 @@ export class SearchStockComponent implements OnInit {
 
   showSpinner: boolean = false;
   showAlert: boolean = false;
-  showError: boolean = false; 
+  showError: boolean = false;
   messageText: string = '';
 
   constructor(private data: DataService, private utility: UtilityService) { }
 
   ngOnInit(): void {
     this.stockForm = new FormGroup({
-      symbol: new FormControl(null, Validators.pattern('^[a-zA-Z ]*$'))
+      symbol: new FormControl('', Validators.pattern('^[a-zA-Z ]*$'))
     })
   }
 
@@ -32,7 +32,7 @@ export class SearchStockComponent implements OnInit {
 
     this.showAlert = false;
     this.showError = false;
-    
+
     let stockSymbol = this.stockForm.controls['symbol'].value.toUpperCase().trim();
 
     //check if stock is already in local storage
@@ -67,7 +67,7 @@ export class SearchStockComponent implements OnInit {
 
         },
         error: (err) => {
-           this.showSpinner = false;
+          this.showSpinner = false;
           this.showError = true;
           this.messageText = "An error occurred!";
           this.stockForm.reset();
@@ -75,7 +75,7 @@ export class SearchStockComponent implements OnInit {
       });
     } else {
       this.showAlert = true;
-      this.messageText = "Stock " + stockSymbol + " already in list!";
+      this.messageText = "Stock " + stockSymbol + " is already in the list!";
       this.stockForm.reset();
     }
 

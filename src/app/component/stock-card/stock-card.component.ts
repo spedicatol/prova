@@ -1,9 +1,6 @@
-import { keyframes } from '@angular/animations';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { forkJoin } from 'rxjs';
 import { Stock } from '../../model/stock';
 import { DataService } from '../../services/data.service';
-import { UtilityService } from '../../services/utility.service';
 
 @Component({
   selector: 'app-stock-card',
@@ -13,11 +10,11 @@ import { UtilityService } from '../../services/utility.service';
 export class StockCardComponent implements OnInit {
 
   @Input() stock: Stock;
-  @Output() stockToDelete: EventEmitter<Stock> = new EventEmitter<Stock>();
+  @Output() stockToDelete: EventEmitter<string> = new EventEmitter<string>();
 
   loadedStock: boolean = false;
   foundStock: boolean = false;
-  constructor(private data: DataService, private utility: UtilityService) { }
+  constructor(private data: DataService) { }
 
   ngOnInit(): void {
 
@@ -45,7 +42,7 @@ export class StockCardComponent implements OnInit {
 
 
   removeStock() {
-    this.stockToDelete.emit(this.stock);
+    this.stockToDelete.emit(this.stock.symbol);
   }
 
 }

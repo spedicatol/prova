@@ -19,9 +19,8 @@ export class HomeComponent implements OnInit {
   }
 
   stockDelete(evt) {
-    let symbol = evt.symbol;
     //remove stock from localStorage
-    this.utility.removeStockInLocalStorageBySymbol(symbol);
+    this.utility.removeStockInLocalStorageBySymbol(evt);
     //update stock list
     this.stockList = this.utility.getStockList();
   }
