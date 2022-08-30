@@ -2,7 +2,8 @@
     <div class="offset-sm-2 col-sm-8 offset-md-3 col-md-6 col-12">
         <form (ngSubmit)="searchBySymbol()" [formGroup]="stockForm">
             <div class="input-group">
-                <label for="exampleStockSymbol" class="w-100">Enter the symbol of a stock to track (i.e. AAPL,TSLA,GOOGL)</label>
+                <label for="exampleStockSymbol" class="w-100">Enter the symbol of a stock to track (i.e.
+                    AAPL,TSLA,GOOGL)</label>
                 <input type="text" maxlength="5" class="form-control" id="exampleStockSymbol" formControlName="symbol"
                     required>
             </div>
@@ -16,8 +17,13 @@
 
         </form>
 
+        <div class="d-flex justify-content-center">
+            <app-spinner *ngIf="showSpinner"></app-spinner>
+        </div>
+    
+        <ng-container *ngIf="showError || showAlert">
+            <app-alert [type]="showError ? 'danger' : 'warning'" [message]="messageText"></app-alert>
+        </ng-container>
     </div>
-    <div class="d-flex justify-content-center">
-        <app-spinner *ngIf="showSpinner"></app-spinner>
-    </div>
+   
 </div>

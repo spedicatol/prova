@@ -5,7 +5,8 @@
             <div class="row">
 
                 <div *ngIf="noData; else showData">
-                    <app-warning-text [message]="'No data available for the last 3 month!'"></app-warning-text>
+                    <app-alert [message]="'No data available for the last 3 month!'" [type]="'warning'"></app-alert>
+               
                 </div>
 
                 <ng-template #showData>

@@ -28,7 +28,7 @@
 
                 <div class="col-12 d-flex justify-content-sm-between">
 
-                    <app-warning-text [message]="stock + ' not found!'"></app-warning-text>
+                    <app-alert [message]="stock.symbol + ' not found!'" [type]="'warning'"></app-alert>
 
                     <button type="button" class="btn-close" aria-label="Close" (click)="removeStock()"></button>
                 </div>

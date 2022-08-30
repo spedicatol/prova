@@ -13,7 +13,11 @@ export class SearchStockComponent implements OnInit {
 
   @Output() stock = new EventEmitter<Stock>();
   stockForm: FormGroup;
+
   showSpinner: boolean = false;
+  showAlert: boolean = false;
+  showError: boolean = false; 
+  messageText: string = '';
 
   constructor(private data: DataService, private utility: UtilityService) { }
 
@@ -25,6 +29,10 @@ export class SearchStockComponent implements OnInit {
 
 
   searchBySymbol() {
+
+    this.showAlert = false;
+    this.showError = false;
+    
     let stockSymbol = this.stockForm.controls['symbol'].value.toUpperCase().trim();
 
     //check if stock is already in local storage
@@ -50,7 +58,8 @@ export class SearchStockComponent implements OnInit {
               localStorage.setItem("stock_" + Date.now(), JSON.stringify(stockRes));
               this.stock.emit(stockRes);
             } else {
-              alert("Stock not found");
+              this.showError = true;
+              this.messageText = "Stock " + stockSymbol + " not found!";
             }
 
           }
@@ -58,13 +67,15 @@ export class SearchStockComponent implements OnInit {
 
         },
         error: (err) => {
-          this.showSpinner = false;
-          alert("Error");
+           this.showSpinner = false;
+          this.showError = true;
+          this.messageText = "An error occurred!";
           this.stockForm.reset();
         }
       });
     } else {
-      alert("Stock already in list");
+      this.showAlert = true;
+      this.messageText = "Stock " + stockSymbol + " already in list!";
       this.stockForm.reset();
     }
 
